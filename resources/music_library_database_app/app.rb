@@ -15,21 +15,25 @@ class Application < Sinatra::Base
   end
 
   post "/albums" do
-    repo = AlbumRepository.new()
-    new_album = Album.new
-    new_album.title = params[:title]
-    new_album.release_year = params[:release_year]
-    new_album.artist_id = params[:artist_id]
+  
+    if params[:title] == nil || params[:release_year] == nil
+      status 400
+    else
+      repo = AlbumRepository.new()
+      new_album = Album.new
+      new_album.title = params[:title]
+      new_album.release_year = params[:release_year]
+      new_album.artist_id = params[:artist_id]
 
-    repo.create(new_album)
-    return ""
+      repo.create(new_album)
+      return erb(:post_created)
+    end
   end
 
   get "/albums" do
     repo = AlbumRepository.new()
     all_albums = repo.all
-    response = all_albums.map do |album| album.title 
-    end.join(", ")
+    response = all_albums.map do |album| album.title end.join(", ")
     return response
   end
 
@@ -42,16 +46,25 @@ class Application < Sinatra::Base
   end
 
   get "/allalbums" do
-    repo = AlbumRepository.new 
+    repo = AlbumRepository.new
     @albums = repo.all
     return erb(:allalbums)
+  end
+
+  get "/albums/add" do
+    return erb(:add_album)
+  end
+
+
+  get "/artists/add" do
+    return erb(:add_artist)
   end
 
   get "/artists/:id" do
     artist_repo = ArtistRepository.new()
     album_repo = AlbumRepository.new()
     @artist = artist_repo.find(params[:id])
-    @artists_albums = album_repo.find_by_artist(params[:id]) 
+    @artists_albums = album_repo.find_by_artist(params[:id])
     return erb(:artists)
   end
 
@@ -61,12 +74,14 @@ class Application < Sinatra::Base
     return erb(:all_artists)
   end
 
+
+
   post "/artists" do
     artist_repo = ArtistRepository.new()
-     @artist = Artist.new()
-     @artist.name = params[:name]
-     @artist.genre = params[:genre]
-     artist_repo.create(@artist)
-     return nil 
-  end 
+    @artist = Artist.new()
+    @artist.name = params[:name]
+    @artist.genre = params[:genre]
+    artist_repo.create(@artist)
+    return erb(:post_created)
+  end
 end

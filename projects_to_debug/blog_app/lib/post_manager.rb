@@ -16,8 +16,9 @@ class PostManager
   end
 
   def all_posts_by_tag(tag)
+
     @posts.select do |post|
-      post.title.include?(tag)
+      post.tags.include?(tag)
     end
   end
 end

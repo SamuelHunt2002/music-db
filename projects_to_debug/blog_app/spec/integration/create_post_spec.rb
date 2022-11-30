@@ -25,9 +25,9 @@ describe Application do
 
     context 'POST /' do
       it 'should add the new post' do
-        _response = post(
+        response = post(
           '/posts',
-          title: 'A new post',
+          the_title: 'A new post',
           content: 'Hi there',
           tags: 'random,things'
         )

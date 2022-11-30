@@ -19,17 +19,22 @@ describe Application do
   it "Posts a new album" do
     response = post("/albums", title: "Voyage", release_year: "2022", artist_id: "2")
     expect(response.status).to eq 200
-    expect(response.body).to eq ''
+    expect(response.body).to include('<h1>You have successfully made an entry.</h1>')
 
     new_response = get("/albums")
     expect(new_response.status).to eq 200
     expect(new_response.body).to include("Voyage")
   end
 
+  it "Throws an error if invalid input for album" do
+    response = post("/albums", release_year: "2022", artist_id: "2")
+    expect(response.status).to eq 400
+  end
+
   it "Album list 2 reproduces the album" do
-    response = get("/albumslist/1")
+    response = get("/albumslist/2")
     expect(response.status).to eq 200 
-    #expect(response.body).to include("<h1>Surfer Rosa</h1>")
+    expect(response.body).to include("<h1>Surfer Rosa</h1>")
   end
   
   it "Gets all albums and prints them" do
@@ -58,5 +63,12 @@ describe Application do
     expect(response.status).to eq 200
     response = get("/artists")
     expect(response.body).to include("Wild Nothing")
+  end
+
+  it "Has an add page for albums" do
+    response = get("/albums/add")
+    expect(response.status).to eq 200
+    expect(response.body).to include("<h1> Add an album!</h1>")
+    expect(response.body).to include('<form action="/albums"')
   end
 end 

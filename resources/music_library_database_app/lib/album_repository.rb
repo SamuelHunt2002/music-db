@@ -5,7 +5,7 @@ class AlbumRepository
     albums = []
 
     # Send the SQL query and get the result set.
-    sql = 'SELECT albums.id AS album_id, title, release_year, artist_id FROM albums JOIN artists ON artist_id = artists.id;'
+    sql = 'SELECT id, title, release_year, artist_id FROM albums;'
     result_set = DatabaseConnection.exec_params(sql, [])
     
     # The result set is an array of hashes.
@@ -16,7 +16,7 @@ class AlbumRepository
       # Create a new model object
       # with the record data.
       album = Album.new
-      album.id = record['album_id'].to_i
+      album.id = record['id'].to_i
       album.title = record['title']
       album.release_year = record['release_year']
       album.artist_id = record['artist_id'].to_i
