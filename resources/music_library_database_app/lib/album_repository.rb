@@ -5,7 +5,7 @@ class AlbumRepository
     albums = []
 
     # Send the SQL query and get the result set.
-    sql = 'SELECT id, title, release_year, artist_id FROM albums;'
+    sql = 'SELECT albums.id AS album_id, title, release_year, artist_id FROM albums JOIN artists ON artist_id = artists.id;'
     result_set = DatabaseConnection.exec_params(sql, [])
     
     # The result set is an array of hashes.
@@ -16,7 +16,7 @@ class AlbumRepository
       # Create a new model object
       # with the record data.
       album = Album.new
-      album.id = record['id'].to_i
+      album.id = record['album_id'].to_i
       album.title = record['title']
       album.release_year = record['release_year']
       album.artist_id = record['artist_id'].to_i
@@ -38,6 +38,29 @@ class AlbumRepository
     album.artist_id = result_set[0]['artist_id'].to_i
 
     return album
+  end
+
+  def find_by_artist(artist_id)
+    sql = 'SELECT id, title, release_year, artist_id FROM albums WHERE artist_id = $1;'
+    result_set = DatabaseConnection.exec_params(sql, [artist_id])
+    albums = []
+    # The result set is an array of hashes.
+    # Loop through it to create a model
+    # object for each record hash.
+    result_set.each do |record|
+
+      # Create a new model object
+      # with the record data.
+      album = Album.new
+      album.id = record['id'].to_i
+      album.title = record['title']
+      album.release_year = record['release_year']
+      album.artist_id = record['artist_id'].to_i
+
+      albums << album
+    end
+
+    return albums
   end
 
   def create(album)

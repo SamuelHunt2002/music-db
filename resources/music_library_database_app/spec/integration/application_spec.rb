@@ -25,4 +25,38 @@ describe Application do
     expect(new_response.status).to eq 200
     expect(new_response.body).to include("Voyage")
   end
-end
+
+  it "Album list 2 reproduces the album" do
+    response = get("/albumslist/1")
+    expect(response.status).to eq 200 
+    #expect(response.body).to include("<h1>Surfer Rosa</h1>")
+  end
+  
+  it "Gets all albums and prints them" do
+    response = get("/allalbums")
+    expect(response.status).to eq 200
+    expect(response.body).to include('<a href="/albumslist/7"> Folklore </a>')
+    expect(response.body).to include('<a href="/albumslist/12"> Ring Ring </a>')
+  end
+
+  it "Produces a page of all the artists" do
+    response = get("/artists")
+    expect(response.status).to eq 200
+    expect(response.body).to include ('<a href="/artists/1"> Pixies </a>')
+    expect(response.body).to include('<a href="/artists/3"> Taylor Swift </a>')
+
+  end
+
+  it "Produces a page for the individual artists" do
+    response = get("/artists/2")
+    expect(response.status).to eq 200 
+    expect(response.body).to include("<h1>ABBA</h1>")
+  end
+
+  it "Adds an artist" do 
+    response = post("/artists?name=Wild%20Nothing&genre=Indie")
+    expect(response.status).to eq 200
+    response = get("/artists")
+    expect(response.body).to include("Wild Nothing")
+  end
+end 

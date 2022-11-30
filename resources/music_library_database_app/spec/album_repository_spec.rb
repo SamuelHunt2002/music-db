@@ -57,4 +57,10 @@ describe AlbumRepository do
     expect(albums.length).to eq(11)
     expect(albums.first.id).to eq(2)
   end
+
+  it 'it finds by artist' do
+    repo = AlbumRepository.new
+    albums = repo.find_by_artist(1)
+    expect(albums.length).to eq 3
+  end
 end
