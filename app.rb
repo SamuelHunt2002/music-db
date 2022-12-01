@@ -31,10 +31,9 @@ class Application < Sinatra::Base
   end
 
   get "/albums" do
-    repo = AlbumRepository.new()
-    all_albums = repo.all
-    response = all_albums.map do |album| album.title end.join(", ")
-    return response
+    repo = AlbumRepository.new
+    @albums = repo.all
+    return erb(:allalbums)
   end
 
   get "/albums/:id" do
@@ -45,11 +44,6 @@ class Application < Sinatra::Base
     return erb(:album)
   end
 
-  get "/allalbums" do
-    repo = AlbumRepository.new
-    @albums = repo.all
-    return erb(:allalbums)
-  end
 
   get "/albums/add" do
     return erb(:add_album)

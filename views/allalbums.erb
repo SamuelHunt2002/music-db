@@ -1,9 +1,9 @@
 <html> 
-<head> </head>
+<head> <link ref="stylesheet" href="/style.css" /> </head>
 <body> 
 <h1>All Albums</h1>
 <%@albums.each do |album| %>
-<a href="/albumslist/<%=album.id%>"> <%=album.title%> </a>
+<a href="/albums/<%=album.id%>"> <%=album.title%> </a>
 <br>
 <%end%>
 </body>
